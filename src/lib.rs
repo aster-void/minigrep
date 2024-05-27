@@ -5,12 +5,12 @@ pub mod test {
     pub fn one_result() {
         let key = "duct";
         let content = "\
-        Rust.
-        Fast, Safe and Productive.
-        Pick three.";
+Rust.
+Fast, Safe and Productive.
+Pick three.";
         assert_eq!(
             search_string(key, content),
-            vec!["Fast, Safe and Productive"]
+            vec!["Fast, Safe and Productive."]
         );
     }
 }
@@ -43,6 +43,7 @@ pub enum ParseConfigError {
 }
 
 pub fn parse_config(mut args: std::env::Args) -> Result<Config, ParseConfigError> {
+    args.next(); // drop program path
     let query = args.next().ok_or(ParseConfigError::NotEnoughArguments)?;
     let Some(filename) = args.next() else {
         return Ok(Config {

@@ -23,12 +23,18 @@ fn main() -> std::io::Result<()> {
     } else {
         // filename not found: doing stdin search
         let stdin = std::io::stdin();
+        let mut result = Vec::new();
         let mut buf = String::new();
-        while let Ok(_) = stdin.read_line(&mut buf) {
-            if minigrep::search_in_line(&config.query, &buf) {
-                println!("{}", buf);
+        while let Ok(len) = stdin.read_line(&mut buf) {
+            if len == 0 {
+                break;
             }
+            if minigrep::search_in_line(&config.query, &buf) {
+                result.push(buf.clone());
+            }
+            buf.clear();
         }
+        print!("{}", result.concat());
     }
     Ok(())
 }
